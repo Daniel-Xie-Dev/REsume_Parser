@@ -1,0 +1,68 @@
+.Navigation {
+  width: 100%;
+
+  background-color: blue;
+}
+
+.NavContainer {
+  display: flex;
+  width: 30%;
+  justify-content: space-around;
+  margin-right: 0;
+}
+.NavContainer > img {
+  width: 65px;
+  height: 65px;
+  margin-left: 2vw;
+  margin-right: 2vw;
+}
+
+.NavContainer > img:hover {
+  cursor: pointer;
+}
+.NavList {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-bottom: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.NavItem {
+  /* width: 100%; */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  border: 2px solid transparent;
+}
+
+.NavItem:hover {
+  /* background-color: rgb(139, 214, 214); */
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+
+  color: white;
+}
+
+.NavItem > a {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 100%;
+  margin: auto;
+  color: white;
+  font-size: larger;
+  text-decoration: none;
+  letter-spacing: 2px;
+  word-spacing: 2px;
+  /* padding-top: 2vh;
+  padding-bottom: 2vh; */
+  justify-content: center;
+  align-items: center;
+}

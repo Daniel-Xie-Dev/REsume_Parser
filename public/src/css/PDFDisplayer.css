@@ -1,0 +1,23 @@
+.PDFDisplayer {
+  display: flex;
+
+  width: 50vw;
+  /* margin-left: auto; */
+  margin-top: 4vh;
+}
+
+.FileImage {
+  flex: 0.15;
+  width: 125px;
+  height: 125px;
+  object-fit: fill;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-right: 5vw;
+}
+
+.FileInformation {
+  flex: 0.8;
+  letter-spacing: 1px;
+  overflow: visible;
+}

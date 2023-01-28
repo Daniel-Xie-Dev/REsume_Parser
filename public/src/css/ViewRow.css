@@ -1,0 +1,51 @@
+.ViewRow {
+  display: flex;
+  width: 80%;
+  margin: auto;
+  outline: 1px solid;
+  margin-bottom: 1px;
+  height: 100%;
+}
+
+.ViewBox,
+.FilterBox {
+  display: flex;
+  margin: auto;
+  width: 100%;
+  height: fit-content;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.FilterBox {
+  background-color: aqua;
+}
+
+.FilterBox:hover {
+  /* cursor: pointer; */
+}
+
+.FilterBox > .dropdown > p,
+.FilterBox > p {
+  text-align: center;
+  margin-bottom: 3vh;
+  margin-top: 3vh;
+  font-size: large;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ViewBox > p,
+.SkillList {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: large;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.SkillList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
