@@ -18,8 +18,8 @@ function Home() {
 
     await axios
       .post(
-        "http://127.0.0.1:5000/parse_data",
-        { file: files },
+        "http://localhost:3001/parse-data",
+        { data: files },
         {
           headers: {
             "Content-Type": "multipart/form-data",

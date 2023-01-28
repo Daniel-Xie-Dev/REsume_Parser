@@ -41,7 +41,7 @@ function RecruiterView() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get("http://127.0.0.1:5000/getResumes").then((response) => {
+      await axios.get("http://localhost:3001/getResumes").then((response) => {
         const arr = response.data.sort((a, b) =>
           a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase())
         );
