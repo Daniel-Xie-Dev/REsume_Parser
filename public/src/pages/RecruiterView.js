@@ -24,7 +24,7 @@ function RecruiterView() {
   };
 
   const searchChange = (event) => {
-    if (filter === "skills") {
+    if (filter === "skills`") {
     }
 
     // else if(filter === "degree"){
@@ -45,6 +45,8 @@ function RecruiterView() {
         const arr = response.data.sort((a, b) =>
           a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase())
         );
+
+        console.log(arr);
 
         setData(arr);
         setDisplay(arr);

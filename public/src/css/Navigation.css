@@ -6,8 +6,8 @@
 
 .NavContainer {
   display: flex;
-  width: 30%;
-  justify-content: space-around;
+  width: 100%;
+
   margin-right: 0;
 }
 .NavContainer > img {
@@ -23,7 +23,6 @@
 .NavList {
   display: flex;
   width: 100%;
-  justify-content: space-around;
   margin-bottom: 0;
   margin: 0;
   padding: 0;

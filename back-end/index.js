@@ -1,9 +1,11 @@
 const express = require("express");
-const cors = require('cors')
+// const resumeParser = require("resume-parser");
+const cors = require("cors");
 const fileUpload = require("express-fileupload");
+const pdf = require("pdf-parse");
 
 const pdfParse = require("pdf-parse");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const nlp = require("compromise");
 
 const app = express();
@@ -29,14 +31,15 @@ async function connect() {
 connect().catch(console.error);
 
 app.use("/", function (req, res, next) {
+  // console.log("hello");
   //   console.log("Request Type:", req.method);
   next();
 });
 
-app.get("/", (req, res) => {
-  res.sendStatus(200);
-  res.send("Hello");
-});
+// app.get("/", (req, res) => {
+//   res.sendStatus(200);
+//   res.send("Hello");
+// });
 
 app.get("/getResumes", async function (req, res) {
   // let db = client.db("resumes");
@@ -54,47 +57,84 @@ app.get("/getResumes", async function (req, res) {
   res.json(result);
 });
 
+app.get("/getResumeById", async function (req, res) {
+  const id = req.query.id;
+  const document = client
+    .db("resumes")
+    .collection("documents")
+    .findOne(
+      {
+        _id: new ObjectId(id),
+      },
+      { projection: { resume: 1 } }
+    );
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=resume.pdf");
+  const buffer = await document;
+
+  // res.sendStatus(200);
+  res.send(buffer);
+});
+
 app.post("/parse-data", async function (req, res) {
-  if (!req.files) {
+  if (!req.files || !req.files.file) {
     res.status(400);
     res.end();
   }
 
-  var doc;
-  await pdfParse(req.files.file).then((result) => {
-    // console.log(result.text);
-    doc = nlp(result.text);
+  let doc;
+  // await pdfParse(req.files.file)
+  //   .then((result) => {
+  //     // console.log(result.text);
+  //     doc = nlp(result.text);
+  //   })
+  //   .catch((error) => console.log(error));
+
+  await pdf(req.files.file.data).then((data) => {
+    console.log(data);
+    doc = nlp(data.text);
   });
 
   let document = new Object();
+  let name = doc.people().text().split(" ");
 
-  console.dir(doc.sentences().terms().out("tags"), { maxArrayLength: null });
-  // console.log(doc.sentences().terms().out("tags"), []);
-  let array = doc.people().text().split(" ");
-  document["firstName"] = array[0];
-  document["lastName"] = array[array.length - 1];
-  document["address"] = doc.matchOne("#Address+? #Place+").text();
-  document["phone"] = doc.phoneNumbers().text();
+  let text = doc.all().text();
+  // console.log(text);
+
+  document["firstName"] = name[0];
+  document["lastName"] = name[name.length - 1];
   document["email"] = doc.emails().text();
-  document["education"] = doc
-    .match("#Organization+ (University|College)$")
-    .unique()
-    .text();
-  document["degree"] = doc
-    .match("(B.S.|Bachelor|BS|Master of Arts|MA|M.A.) (of|in) #Noun")
-    .text();
-  document["skills"] = doc
-    .match(
-      "(C|C++|C#|Java|JavaScript|TypeScript|Python|Ruby|Scala|HTML|CSS|SQL|PHP|Bash|Go)"
-    )
-    .unique()
-    .out("array");
+  document["phoneNumber"] = doc.phoneNumbers().text();
 
-  for (var i = 0; i < document["skills"].length; i++) {
-    document["skills"][i] = document["skills"][i].replace(/[,()]/g, "");
-  }
-  document["resume"] = req.files.file;
-  // document["organization"] = doc.organizations().text();
+  document["degree"] = text.match(
+    /(Bachelor|BS|B\.S\.|Master|MS|M\.S\.) (of|at|in) ([A-Z][a-z]+)+/gm,
+    "i"
+  );
+
+  document["education"] = [
+    ...new Set(text.match(/([A-Z][a-z]+\s)+(University|College)/gm, "i")),
+  ];
+  document["skills"] = [
+    ...new Set(
+      text.match(
+        /(C\+\+|C#|CSS|C\b|JavaScript|Java|TypeScript|Python|Go|Ruby|HTML|Scala)/gm,
+        "i"
+      )
+    ),
+  ];
+
+  document["frameworks"] = [
+    ...new Set(
+      text.match(
+        /(SpringBoot|Spring|AWS|Azure|Express|Node|React|Django|Flask|Angular|Vue\.js|Rails|Firebase|MYSQL|Mongo)/g,
+        "i"
+      )
+    ),
+  ];
+
+  document["resume"] = Buffer.from(req.files.file.data);
+  // console.log(document["education"]);
 
   console.log(document);
   await client.db("resumes").collection("documents").insertOne(document);

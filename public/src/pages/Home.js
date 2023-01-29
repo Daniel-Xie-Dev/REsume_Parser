@@ -7,6 +7,7 @@ import axios from "axios";
 function Home() {
   const [files, setFiles] = useState(undefined);
   const [progress, setProgress] = useState(0);
+  const [uploaded, setUploaded] = useState(false);
 
   const onChange = (event) => {
     if (event.target.files[0].size / 1000000 > 2) return;
@@ -19,7 +20,7 @@ function Home() {
     await axios
       .post(
         "http://localhost:3001/parse-data",
-        { data: files },
+        { file: files },
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -31,7 +32,9 @@ function Home() {
           },
         }
       )
-      .then((res) => console.log(res));
+      .then(() => {
+        setUploaded(true);
+      });
 
     // fetch("http://localhost:3001/parse-data", {
     //   method: "post",
@@ -41,7 +44,8 @@ function Home() {
     setTimeout(() => {
       setFiles(undefined);
       setProgress(0);
-    }, 500);
+      setUploaded(false);
+    }, 250);
   };
 
   return (
@@ -63,7 +67,7 @@ function Home() {
             <PDFDisplayer file={files} />
             <ProgressBar
               className="ProgressBar"
-              variant={progress === 100 ? "success" : "primary"}
+              variant={uploaded ? "success" : "primary"}
               striped
               animated
               now={progress}
