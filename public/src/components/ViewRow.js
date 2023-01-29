@@ -73,9 +73,9 @@ function ViewRow(props) {
             <div className="FilterBox">
               <p>Skills</p>
             </div>
-            <div className="FilterBox">
+            {/* <div className="FilterBox">
               <p>Resume</p>
-            </div>
+            </div> */}
           </>
         ) : (
           <>
@@ -142,13 +142,13 @@ function ViewRow(props) {
                 </ul>
               ) || "Not Available"}
             </div>
-            <div className="ViewBox">
+            {/* <div className="ViewBox">
               {download ? (
                 <a href={`data:application/pdf;base64,${download}`}>Open PDF</a>
               ) : (
                 <button onClick={openPDFHandler}>Download Resume</button>
               )}
-            </div>
+            </div> */}
           </>
         )}
       </div>

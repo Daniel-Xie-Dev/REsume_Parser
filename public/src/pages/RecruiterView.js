@@ -14,9 +14,11 @@ function RecruiterView() {
 
   const handleChange = (event) => {
     const map = {
+      All: "all",
       "First Name": "firstName",
       "Last Name": "lastName",
       Degree: "degree",
+      Skills: "skills",
     };
 
     console.log(map[event.target.value]);
@@ -24,14 +26,38 @@ function RecruiterView() {
   };
 
   const searchChange = (event) => {
-    if (filter === "skills`") {
-    }
+    let string = event.target.value.toLowerCase();
+    string = string.replace(/\+/g, "\\+");
+    // string.replace("+", `\+`);
+    const search = new RegExp("^" + string + ".*");
 
-    // else if(filter === "degree"){
-    //   const search = new RegExp(event.target.value + ".*");
+    // if (filter === "all") {
+    //   let matched = []
+    //   for (let i = 0; i < data.length; i++) {
+    //     const keys = Object.keys(data[i]);
+    //     for (const key in keys) {
+    //       if(Array.isArray(data[key])){
+    //         for(let j = 0; j < data[key].length; j++){
+    //           if()
+    //         }
+    //       }
+    //     }
+    //   }
     // }
-    else {
-      const search = new RegExp("^" + event.target.value + ".*");
+    if (filter === "skills") {
+      let matched = [];
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[i].skills.length; j++) {
+          if (data[i].skills[j].toLowerCase().match(search)) {
+            matched.push(data[i]);
+            break;
+          }
+        }
+      }
+      setDisplay(matched);
+    } else if (filter === "degree") {
+      // const search = new RegExp(event.target.value + ".*");
+    } else {
       const matched = data.filter((item) =>
         item[filter].toLowerCase().match(search)
       );
@@ -78,9 +104,11 @@ function RecruiterView() {
     <div className="RecruiterView">
       <div className="RecruiterFilter">
         <Form.Select className="RecruiterSelect" onChange={handleChange}>
+          {/* <option>All</option> */}
           <option>First Name</option>
           <option>Last Name</option>
-          <option>Degree</option>
+          <option>Skills</option>
+          {/* <option>Degree</option> */}
         </Form.Select>
 
         <Form.Group className="RecruiterSearch">
