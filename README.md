@@ -1,7 +1,7 @@
 <br/>
 <p align="center">
   <a href="https://github.com/Daniel-Xie-Dev/Resume_Parser">
-    <img src="[images/logo.png](https://github.com/Daniel-Xie-Dev/amazon-clone/blob/0aaa2c4fce28ff4e127d3df3d2e200cbd912db8d/images/logo.png)" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">HR Automation Tool</h3>
